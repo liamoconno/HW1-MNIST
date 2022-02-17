@@ -53,7 +53,7 @@ class Model:
         :param labels: the true batch labels
         :return: average loss per batch element (float)
         """
-        return np.sum(-np.log(probabilities[np.arange(0, self.batch_size), labels])/self.batch_size)
+        return np.mean(-np.log(probabilities[np.arange(0, self.batch_size), labels]))
     
     def back_propagation(self, inputs, probabilities, labels):
         """
@@ -70,10 +70,8 @@ class Model:
         :param labels: true labels
         :return: gradient for weights, and gradient for biases
         """
-        # 
         indicator = np.zeros((labels.size, self.num_classes))
         indicator[np.arange(labels.size), labels] = 1
-        # ASK ABOUT THE AVERAGING, check axes etc.
         # make a separate bias gradient to return
         weights_gradient = (1/self.batch_size) * (np.matmul(inputs.transpose(), (probabilities-indicator)))
 

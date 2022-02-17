@@ -37,7 +37,6 @@ def get_data(inputs_file_path, labels_file_path, num_examples):
         L = np.concatenate(np.reshape(np.frombuffer(bytestream.read(num_examples), dtype=np.uint8), (-1, 1)))
     return X, L
 
-## NOTE you may want to introduce batching method here
 def get_next_batch(X, L, start_index, batch_size):
     """
     Returns a slice of data and a slice of labels, given a starting index
