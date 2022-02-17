@@ -22,7 +22,26 @@ def get_data(inputs_file_path, labels_file_path, num_examples):
     (example) is 28 * 28, with a header of a certain number.
     :return: NumPy array of inputs (float32) and labels (uint8)
     """
+    with open(inputs_file_path, 'rb') as f, gzip.GzipFile(fileobj=f) as bytestream:
+        # get rid of header
+        bytestream.read(16) 
+        # Creates an array to store inputs
+        # Go image by image, adding as a row, normalizing values
+        # np.float32, cast
+        X = (1/255.0)*(np.reshape(np.frombuffer(bytestream.read(
+            784*num_examples), dtype=np.uint8), (-1, 784)).astype(np.float32))
     
-    # TODO: Load inputs and labels
-    # TODO: Normalize inputs
+    with open(labels_file_path, 'rb') as fl, gzip.GzipFile(fileobj=fl) as bytestream:
+        bytestream.read(8) # get rid of header
+        # use np.uint8
+        L = np.reshape(np.frombuffer(bytestream.read(num_examples), dtype=np.uint8), (-1, 1))
+    return X, L
 
+## NOTE you may want to introduce batching method here
+def get_next_batch(X, L, start_index, batch_size):
+    """
+    Returns a slice of data and a slice of labels, given a starting index
+    for the slice and the batch size. These two slices represent a batch of data
+    and a abatch of labels. MAKE SURE NOT TO CALL IN MAIN
+    """
+    return X[start_index: start_index + batch_size], L[start_index: start_index + batch_size]
