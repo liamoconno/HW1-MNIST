@@ -53,11 +53,7 @@ class Model:
         :param labels: the true batch labels
         :return: average loss per batch element (float)
         """
-<<<<<<< HEAD
         return np.sum(-np.log(probabilities[np.arange(0, self.batch_size), labels])/self.batch_size)
-=======
-        return np.sum(-np.log(probabilities[np.arange(0, self.batch_size), np.concatenate(labels)])/self.batch_size)
->>>>>>> cca994715067076757c2d46663203e24f923e188
     
     def back_propagation(self, inputs, probabilities, labels):
         """
@@ -76,11 +72,7 @@ class Model:
         """
         # 
         indicator = np.zeros((labels.size, self.num_classes))
-<<<<<<< HEAD
         indicator[np.arange(labels.size), labels] = 1
-=======
-        indicator[np.arange(labels.size), np.concatenate(labels)] = 1
->>>>>>> cca994715067076757c2d46663203e24f923e188
         # ASK ABOUT THE AVERAGING, check axes etc.
         # make a separate bias gradient to return
         weights_gradient = (1/self.batch_size) * (np.matmul(inputs.transpose(), (probabilities-indicator)))
@@ -99,15 +91,8 @@ class Model:
         :param labels: test set labels
         :return: batch accuracy (float [0,1])
         """
-        # Create a matrix where I_i,j = 1 if j = c, 0 otherwise
-        indicator = np.zeros_like(probabilities)
-        indicator[np.arange(len(probabilities)), probabilities.argmax(1)] = 1
-        # Sum the elements at each correct label, divide by the total number in the batch
-<<<<<<< HEAD
-        return np.sum(indicator[np.arange(0, labels.size), np.reshape(labels, (-1, 1))])/labels.size
-=======
-        return np.sum(indicator[np.arange(0, labels.size), np.concatenate(labels)])/labels.size
->>>>>>> cca994715067076757c2d46663203e24f923e188
+        return np.mean(labels == np.argmax(probabilities, axis=1))
+
 
     def gradient_descent(self, gradW, gradB):
         '''
@@ -119,8 +104,8 @@ class Model:
         :return: None
         '''
 
-        self.W = self.W - (self.learning_rate * (gradW))
-        self.b = self.b - (self.learning_rate * (gradB))
+        self.W -= (self.learning_rate * (gradW))
+        self.b -= (self.learning_rate * (gradB))
 
         return None
     
@@ -239,8 +224,4 @@ def main():
     # Visualize the data by using visualize_results()
     visualize_results(train_inputs[:10], model.call(train_inputs[:10]), train_labels[:10])
 if __name__ == '__main__':
-<<<<<<< HEAD
     main()
-=======
-    main()
->>>>>>> cca994715067076757c2d46663203e24f923e188
