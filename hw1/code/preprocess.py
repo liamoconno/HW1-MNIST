@@ -34,7 +34,11 @@ def get_data(inputs_file_path, labels_file_path, num_examples):
     with open(labels_file_path, 'rb') as fl, gzip.GzipFile(fileobj=fl) as bytestream:
         bytestream.read(8) # get rid of header
         # use np.uint8
+<<<<<<< HEAD
         L = np.concatenate(np.reshape(np.frombuffer(bytestream.read(num_examples), dtype=np.uint8), (-1, 1)))
+=======
+        L = np.reshape(np.frombuffer(bytestream.read(num_examples), dtype=np.uint8), (-1, 1))
+>>>>>>> cca994715067076757c2d46663203e24f923e188
     return X, L
 
 ## NOTE you may want to introduce batching method here
