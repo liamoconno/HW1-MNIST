@@ -109,45 +109,45 @@ class Model:
 
         return None
     
-    def train(model, train_inputs, train_labels):
-        '''
-        Trains the model on all of the inputs and labels.
-        :param model: the initialized model to use for the forward 
-        pass and backward pass
-        
-        :param train_inputs: train inputs (all inputs to use for training)
-        :param train_inputs: train labels (all labels to use for training)
-        :return: None
-        '''
-        # Iterate over the training inputs and labels, in model.batch_size increments and do forward pass
-        losses = np.empty(int(train_labels.size / model.batch_size))
-        for i in range(0, train_labels.size, model.batch_size):
-            # Get the batched inputs and labels
-            inputs, labels = get_next_batch(train_inputs, train_labels, i, model.batch_size)
-            # Forward pass, create the probabilities matrix
-            probabilities = model.call(inputs)   
-            # Calculate the gradients
-            gradW, gradB = model.back_propagation(inputs, probabilities, labels)
-            # Update the weights and biases
-            model.gradient_descent(gradW, gradB)
-            # Visualize losses
-            losses[int(i/model.batch_size)] = model.loss(probabilities, labels)
-        visualize_loss(losses)
-        return None
-        
+def train(model, train_inputs, train_labels):
+    '''
+    Trains the model on all of the inputs and labels.
+    :param model: the initialized model to use for the forward 
+    pass and backward pass
+    
+    :param train_inputs: train inputs (all inputs to use for training)
+    :param train_inputs: train labels (all labels to use for training)
+    :return: None
+    '''
+    # Iterate over the training inputs and labels, in model.batch_size increments and do forward pass
+    losses = np.empty(int(train_labels.size / model.batch_size))
+    for i in range(0, train_labels.size, model.batch_size):
+        # Get the batched inputs and labels
+        inputs, labels = get_next_batch(train_inputs, train_labels, i, model.batch_size)
+        # Forward pass, create the probabilities matrix
+        probabilities = model.call(inputs)   
+        # Calculate the gradients
+        gradW, gradB = model.back_propagation(inputs, probabilities, labels)
+        # Update the weights and biases
+        model.gradient_descent(gradW, gradB)
+        # Visualize losses
+        losses[int(i/model.batch_size)] = model.loss(probabilities, labels)
+    visualize_loss(losses)
+    return None
+    
 
-    def test(model, test_inputs, test_labels):
-        """
-        Tests the model on the test inputs and labels. For this assignment, 
-        the inputs should be the entire test set, but in the future we will
-        ask you to batch it instead.
-        
-        :param test_inputs: MNIST test data (all images to be tested)
-        :param test_labels: MNIST test labels (all corresponding labels)
-        :return: accuracy (float [0,1])
-        """
-        # Return accuracy across testing set
-        return model.accuracy(model.call(test_inputs), test_labels)
+def test(model, test_inputs, test_labels):
+    """
+    Tests the model on the test inputs and labels. For this assignment, 
+    the inputs should be the entire test set, but in the future we will
+    ask you to batch it instead.
+    
+    :param test_inputs: MNIST test data (all images to be tested)
+    :param test_labels: MNIST test labels (all corresponding labels)
+    :return: accuracy (float [0,1])
+    """
+    # Return accuracy across testing set
+    return model.accuracy(model.call(test_inputs), test_labels)
 
 def visualize_loss(losses):
     """
@@ -218,9 +218,9 @@ def main():
     # Create Model
     model = Model()
     # Train model by calling train() ONCE on all data
-    model.train(train_inputs, train_labels)
+    train(model, train_inputs, train_labels)
     # Test the accuracy by calling test() after running train()
-    print(model.test(test_inputs, test_labels))
+    print(test(model, test_inputs, test_labels))
     # Visualize the data by using visualize_results()
     visualize_results(train_inputs[:10], model.call(train_inputs[:10]), train_labels[:10])
 if __name__ == '__main__':
